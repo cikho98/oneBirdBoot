@@ -29,13 +29,13 @@ public class UserController {
         String nickname = request.getParameter("username");
         String ageStr = request.getParameter("age");
         if (Judge.isIllegalParameter(username,password,nickname,ageStr)
-        ||ageStr.matches("[0-9]+")){
+        ||!ageStr.matches("[0-9]+")){
             response.sendRedirect("/reg_info_error.html");
             return;
         }
         File file = new File(userDir,username+".obj");
         if (file.exists()){
-            response.sendRedirect("/hvaeUser.html");
+            response.sendRedirect("/haveUser.html");
             return;
         }
         int age = Integer.parseInt(ageStr);
@@ -44,6 +44,7 @@ public class UserController {
         ObjectOutputStream oos  = new ObjectOutputStream(fos);
         oos.writeObject(user);
         System.out.println("创建成功");
+        response.sendRedirect("/reg_user_success.html");
     }
 
 
