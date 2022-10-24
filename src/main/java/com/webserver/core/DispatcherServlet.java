@@ -10,6 +10,8 @@ import com.webserver.http.HttpServletResponse;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 
 public class DispatcherServlet {
@@ -30,8 +32,6 @@ public class DispatcherServlet {
     }
 
     private DispatcherServlet() {
-
-
     }
 
     public static DispatcherServlet getInstance() {
@@ -39,27 +39,35 @@ public class DispatcherServlet {
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //获取请求虚拟路径
         String path = request.getRequestURI();
-        File file = new File(staticDir, path);
-        if ("/regUser".equals(path)) {
-            UserController con = new UserController();
-            con.reg(request,response);
-        } else if ("/loginUser".equals(path)) {
-            UserController con = new UserController();
-            con.reg(request,response);
-        } else {
-            if (file.isFile()) {
-                response.setContentFile(file);
-                System.out.println(file.getName()+"------------------------");
-            } else {
-                response.setStatusCode(404);
-                response.setStatusReason("NotFound");
-                file = new File(staticDir, "404.html");
-                response.setContentFile(file);
+
+        try {
+            Method method =HandlerMapping.getMethod(path);
+            if (method!=null) {
+                Class cls = method.getDeclaringClass();
+                Object o = cls.newInstance();
+                method.invoke(o, request, response);
+                return;
             }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
 
+        //获取请求虚拟路径
+        File file = new File(staticDir, path);
+        if (file.isFile()) {
+            response.setContentFile(file);
+            System.out.println(file.getName()+"------------------------");
+        } else {
+            response.setStatusCode(404);
+            response.setStatusReason("NotFound");
+            file = new File(staticDir, "404.html");
+            response.setContentFile(file);
+        }
 
     }
 

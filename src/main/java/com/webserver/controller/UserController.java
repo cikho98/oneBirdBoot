@@ -1,5 +1,7 @@
 package com.webserver.controller;
 
+import com.webserver.annoations.Controller;
+import com.webserver.annoations.RequestMapping;
 import com.webserver.common.Judge;
 import com.webserver.entity.User;
 import com.webserver.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Controller
 public class UserController {
     private static File userDir;
 
@@ -20,8 +23,7 @@ public class UserController {
         }
     }
 
-
-
+    @RequestMapping("/regUser")
     public void reg(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("开始创建用户");
         String username = request.getParameter("username");

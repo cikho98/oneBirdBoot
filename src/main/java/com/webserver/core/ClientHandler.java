@@ -19,7 +19,6 @@ public class ClientHandler implements Runnable {
         try {
             HttpServletRequest request = new HttpServletRequest(socket);
             HttpServletResponse response = new HttpServletResponse(socket);
-
             DispatcherServlet.getInstance().service(request, response);
             response.service();
 
