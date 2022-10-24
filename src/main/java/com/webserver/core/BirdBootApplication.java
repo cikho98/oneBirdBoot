@@ -10,7 +10,7 @@ public class BirdBootApplication {
     /*
     初始化服务器，启动服务器
      */
-    public BirdBootApplication(){
+    public BirdBootApplication() {
         try {
             System.out.println("正在服务器启动。。。。");
             serverSocket = new ServerSocket(8089);
@@ -23,11 +23,11 @@ public class BirdBootApplication {
     /*
     等待客户等待，没连接一个启动一个线程
      */
-    public void start(){
+    public void start() {
         try {
-            while (true){
+            while (true) {
                 System.out.println("等待客户连接中");
-                Socket socket =serverSocket .accept();
+                Socket socket = serverSocket.accept();
                 System.out.println("客户连接了");
                 ClientHandler handler = new ClientHandler(socket);
                 Thread t = new Thread(handler);

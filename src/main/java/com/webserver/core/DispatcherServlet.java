@@ -4,10 +4,12 @@ package com.webserver.core;
 调度器，处理事务
  */
 
+import com.webserver.controller.UserController;
 import com.webserver.http.HttpServletRequest;
 import com.webserver.http.HttpServletResponse;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class DispatcherServlet {
@@ -23,11 +25,11 @@ public class DispatcherServlet {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        staticDir = new File(root,"static");
+        staticDir = new File(root, "static");
 
     }
 
-    private DispatcherServlet(){
+    private DispatcherServlet() {
 
 
     }
@@ -36,21 +38,24 @@ public class DispatcherServlet {
         return instance;
     }
 
-    public void service(HttpServletRequest request, HttpServletResponse response){
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //获取请求虚拟路径
         String path = request.getRequestURI();
-        if ("/regUser".equals(path)){
-
-        }else if("/loginUser".equals(path)){
-
-        }else{
-            File file =new File(staticDir,path);
-            if (file.isFile()){
+        File file = new File(staticDir, path);
+        if ("/regUser".equals(path)) {
+            UserController con = new UserController();
+            con.reg(request,response);
+        } else if ("/loginUser".equals(path)) {
+            UserController con = new UserController();
+            con.reg(request,response);
+        } else {
+            if (file.isFile()) {
                 response.setContentFile(file);
-            }else {
+                System.out.println(file.getName()+"------------------------");
+            } else {
                 response.setStatusCode(404);
                 response.setStatusReason("NotFound");
-                file = new File(staticDir,"404.html");
+                file = new File(staticDir, "404.html");
                 response.setContentFile(file);
             }
         }

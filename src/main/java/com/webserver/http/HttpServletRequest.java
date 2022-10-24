@@ -53,7 +53,7 @@ public class HttpServletRequest {
     //解析第一行请求参数
     private void parseReadLine() throws IOException, EmptyRequestException {
         String line = readLine();
-        System.out.println("请求行："+line);
+        System.out.println("请求行：" + line);
         if (line.isEmpty()) {
             throw new EmptyRequestException();
         }
@@ -66,7 +66,9 @@ public class HttpServletRequest {
 
     //解析请求路径，分割请求接口及传参，赋值到成员变量，使用Map进行装入数据;
     private void parseURI() {
-        if (uri.split("\\?").length > 1) {
+        String[] data = uri.split("\\?");
+        requestURI = data[0];
+        if (data.length > 1) {
             String[] uriArray = uri.split("\\?", 2);
             requestURI = uriArray[0];
             queryString = uriArray[1];
@@ -123,6 +125,10 @@ public class HttpServletRequest {
 
     public String getRequestURI() {
         return requestURI;
+    }
+
+    public String getUri() {
+        return uri;
     }
 
     //读写socket数据
